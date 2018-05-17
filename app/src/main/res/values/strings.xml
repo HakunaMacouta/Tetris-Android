@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Tetris</string>
+    <string name="play_button">Play</string>
+    <string name="score_text">Best Scores</string>
+    <string name="copyright">© 1997 HakunaMacouta</string>
+
+
+
+    <string name="todo">todo</string>
+</resources>
