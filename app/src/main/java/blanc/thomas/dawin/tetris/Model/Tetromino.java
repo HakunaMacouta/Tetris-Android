@@ -1,6 +1,6 @@
 package blanc.thomas.dawin.tetris.Model;
 
-public abstract class Tetromino {
+public abstract class Tetromino implements Movement {
     protected int height;
     protected int width;
     protected boolean[][] matrix;
@@ -17,5 +17,20 @@ public abstract class Tetromino {
     public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    @Override
+    public void left() {
+        this.x -= 1;
+    }
+
+    @Override
+    public void right() {
+        this.x += 1;
+    }
+
+    @Override
+    public void down() {
+        this.y += 1;
     }
 }

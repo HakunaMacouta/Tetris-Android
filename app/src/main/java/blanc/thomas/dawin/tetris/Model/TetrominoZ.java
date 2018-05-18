@@ -1,6 +1,6 @@
 package blanc.thomas.dawin.tetris.Model;
 
-public class TetrominoZ extends Tetromino implements Movement {
+public class TetrominoZ extends Tetromino {
     TetrominoZ(int sprite) {
         super(sprite);
         this.width = 3;
@@ -14,21 +14,6 @@ public class TetrominoZ extends Tetromino implements Movement {
 
     @Override
     public void rotate() {
-
-    }
-
-    @Override
-    public void left() {
-
-    }
-
-    @Override
-    public void right() {
-
-    }
-
-    @Override
-    public void down() {
 
     }
 }
