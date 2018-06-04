@@ -1,5 +1,7 @@
 package blanc.thomas.dawin.tetris.Model;
 
+import java.util.Random;
+
 public abstract class Tetromino implements Movement {
     protected int height;
     protected int width;
@@ -9,6 +11,7 @@ public abstract class Tetromino implements Movement {
     protected int sprite;
 
     Tetromino(int sprite) {
+        Random rand = new Random();
         this.x = 0;
         this.y = 0;
         this.sprite = sprite;

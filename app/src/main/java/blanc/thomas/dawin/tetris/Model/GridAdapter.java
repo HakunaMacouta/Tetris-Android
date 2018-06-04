@@ -7,22 +7,22 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 public class GridAdapter extends BaseAdapter {
-    private Context mContext;
-    private int img;
+    private Context context;
+    private int[] imageMatrix;
 
-    public GridAdapter(Context c, int i) {
-        mContext = c;
-        img = i;
+    public GridAdapter(Context context, int[] data) {
+        this.context = context;
+        this.imageMatrix = data;
     }
 
     @Override
     public int getCount() {
-        return 250;
+        return this.imageMatrix.length;
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return this.imageMatrix[position];
     }
 
     @Override
@@ -35,15 +35,14 @@ public class GridAdapter extends BaseAdapter {
         ImageView imageView;
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mContext);
+            imageView = new ImageView(context);
             imageView.setAdjustViewBounds(true);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(0, 0, 0, 0);
         } else {
             imageView = (ImageView) convertView;
         }
-
-        imageView.setImageResource(img);
+        imageView.setImageResource(imageMatrix[position]);
         return imageView;
     }
 }

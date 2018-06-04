@@ -10,13 +10,21 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import blanc.thomas.dawin.tetris.Model.GridAdapter;
+import blanc.thomas.dawin.tetris.Model.IntMatrix;
 import blanc.thomas.dawin.tetris.Model.Tetromino;
 
 public class GameActivity extends AppCompatActivity {
 
-    private GridView gameGrid;
     private Timer timer;
+
     private Tetromino current;
+    private Tetromino next;
+
+    private int numColumns = 10;
+    private int numRows = 20;
+
+    private GridView gameGridView;
+    private IntMatrix gameMatrix;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +34,15 @@ public class GameActivity extends AppCompatActivity {
 
         timer = new Timer();
 
-        gameGrid = findViewById(R.id.GameGrid);
-        gameGrid.setAdapter(new GridAdapter(this, R.drawable.block_t));
+        gameMatrix = new IntMatrix(numColumns, numRows);
+
+        gameGridView = findViewById(R.id.GameGrid);
+        gameGridView.setAdapter(new GridAdapter(this, gameMatrix.data()));
 
         timer.scheduleAtFixedRate(new TimerTask(){
             @Override
             public void run(){
-                Log.i("tag", "A Kiss every 5 seconds");
+
             }
         },0,5000);
     }
@@ -47,5 +57,4 @@ public class GameActivity extends AppCompatActivity {
         int UI_OPTIONS = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
         getWindow().getDecorView().setSystemUiVisibility(UI_OPTIONS);
     }
-
 }
