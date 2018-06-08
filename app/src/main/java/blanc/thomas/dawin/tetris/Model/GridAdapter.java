@@ -8,9 +8,9 @@ import android.widget.ImageView;
 
 public class GridAdapter extends BaseAdapter {
     private Context context;
-    private int[] imageMatrix;
+    private Integer[] imageMatrix;
 
-    public GridAdapter(Context context, int[] data) {
+    public GridAdapter(Context context, Integer[] data) {
         this.context = context;
         this.imageMatrix = data;
     }

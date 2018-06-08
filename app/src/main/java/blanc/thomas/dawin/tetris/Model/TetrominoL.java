@@ -5,11 +5,12 @@ public class TetrominoL extends Tetromino {
         super(sprite);
         this.width = 3;
         this.height = 2;
-        this.matrix = new boolean[width][height];
-        this.matrix[2][0] = true;
-        for(int i = 0; i < width; i++) {
-            this.matrix[i][1] = true;
-        }
+        this.matrix = new boolean[][]
+        {
+	        { true, false },
+	        { true, false },
+	        { true, true }
+        };
     }
 
     @Override

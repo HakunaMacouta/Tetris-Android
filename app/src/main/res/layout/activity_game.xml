@@ -34,6 +34,7 @@
                 android:id="@+id/GameGrid"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:layout_weight="0.8"
                 android:adjustViewBounds="true"
                 android:background="@android:color/darker_gray"
@@ -105,23 +106,6 @@
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.70" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.30"
-            android:orientation="vertical"></LinearLayout>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

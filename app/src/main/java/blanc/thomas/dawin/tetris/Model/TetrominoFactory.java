@@ -3,7 +3,7 @@ package blanc.thomas.dawin.tetris.Model;
 import blanc.thomas.dawin.tetris.R;
 
 public class TetrominoFactory {
-    public Tetromino createTetromino() {
+    static public Tetromino createTetromino() {
         Tetromino tetromino = null;
         switch (TetrominoType.randomTetrominoType()) {
             case I: tetromino = new TetrominoI(R.drawable.block_i); break;
