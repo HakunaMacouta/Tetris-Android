@@ -11,8 +11,8 @@ import blanc.thomas.dawin.tetris.R;
 public class GameEngine extends OnSwipeTouchListener implements Runnable {
 	private Handler handler;
 	private int gameSpeed = 500;
-	private int numColumns = 10;
-	private int numRows = 34;
+	static public int numColumns = 10;
+	static public int numRows = 34;
 	private Tetromino current, next;
 
 	private Matrix<Integer> gameMatrix, nextMatrix;

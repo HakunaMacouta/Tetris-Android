@@ -8,7 +8,7 @@ public abstract class Tetromino implements Movement {
 
     Tetromino(int sprite) {
         this.x = 0;
-        this.y = 0;
+        this.y = GameEngine.numColumns/2;
         this.sprite = sprite;
     }
 
