@@ -5,11 +5,11 @@ import java.util.Arrays;
 class TetrominoO extends Tetromino {
     TetrominoO(int sprite) {
         super(sprite);
-        this.width = 2;
-        this.height = 2;
         this.matrix = new boolean[][] {
-                { true, true },
-                { true, true }
+                { false, false, false, false },
+                { false, true, true, false },
+                { false, true, true, false },
+                { false, false, false, false }
         };
     }
 

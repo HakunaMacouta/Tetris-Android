@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridView;
-import java.util.Timer;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import blanc.thomas.dawin.tetris.Model.GameEngine;
 
 public class GameActivity extends AppCompatActivity {
@@ -17,12 +19,32 @@ public class GameActivity extends AppCompatActivity {
         initGame();
     }
 
+	@SuppressLint("ClickableViewAccessibility")
 	private void initGame() {
+		//Handler for thread
 	    final Handler handler = new Handler();
-		GameEngine gameEngine = new GameEngine(GameActivity.this, handler);
+
+	    //Game logic
+		GameEngine gameEngine = new GameEngine(GameActivity.this, handler,
+				(TextView)findViewById(R.id.ScoreTextView),
+				(TextView)findViewById(R.id.LevelTextView),
+				(TextView)findViewById(R.id.LinesTextView));
+
+		//GameGridview
 		GridView gameGridView = findViewById(R.id.GameGrid);
-		gameGridView.setAdapter(gameEngine.adapter());
+		gameGridView.setOnTouchListener(gameEngine);
+		gameGridView.setAdapter(gameEngine.getGameAdapter());
+
+		//NextGridView
+		GridView nextGridView = findViewById(R.id.NextGridView);
+		nextGridView.setAdapter(gameEngine.getNextAdapter());
+
+		//Post loop
 		handler.post(gameEngine);
+	}
+
+	void onRotate(View v) {
+//		gameEngine.rotateCurrent();
 	}
 
 	@Override

@@ -1,18 +1,14 @@
 package blanc.thomas.dawin.tetris.Model;
 
-import java.util.Random;
-
 public abstract class Tetromino implements Movement {
-    protected int height;
-    protected int width;
     protected boolean[][] matrix;
     private int x;
     private int y;
 	private int sprite;
 
     Tetromino(int sprite) {
-        this.x = 5;
-        this.y = 5;
+        this.x = 0;
+        this.y = 0;
         this.sprite = sprite;
     }
 
@@ -24,17 +20,21 @@ public abstract class Tetromino implements Movement {
     }
 
     @Override
-    public void left() {
-        this.x -= 1;
+    public void left(Matrix<Integer> grid) {
+        if (canMove(grid, Direction.Left)) {
+	        this.x -= 1;
+        }
     }
 
     @Override
-    public void right() {
+    public void right(Matrix<Integer> grid) {
+    	if(canMove(grid, Direction.Right))
         this.x += 1;
     }
 
     @Override
-    public void down() {
+    public void down(Matrix<Integer> grid) {
+    	if(canMove(grid, Direction.Down))
         this.y += 1;
     }
 
@@ -44,5 +44,17 @@ public abstract class Tetromino implements Movement {
 
     public boolean[][] matrix() {
         return this.matrix;
+    }
+
+    private boolean canMove(Matrix<Integer> gameGrid, Direction dir) {
+    	switch (dir) {
+		    case Left:
+			    break;
+		    case Down:
+			    break;
+		    case Right:
+			    break;
+	    }
+    	return true;
     }
 }

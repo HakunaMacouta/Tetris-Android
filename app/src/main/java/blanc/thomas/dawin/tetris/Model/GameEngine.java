@@ -2,28 +2,45 @@ package blanc.thomas.dawin.tetris.Model;
 
 import android.content.Context;
 import android.os.Handler;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import blanc.thomas.dawin.tetris.GameActivity;
 import blanc.thomas.dawin.tetris.R;
 
 public class GameEngine extends OnSwipeTouchListener implements Runnable {
 	private Handler handler;
-	private int gameSpeed = 1000;
+	private int gameSpeed = 500;
 	private int numColumns = 10;
 	private int numRows = 34;
 	private Tetromino current, next;
 
-	private Matrix<Integer> gameMatrix;
+	private Matrix<Integer> gameMatrix, nextMatrix;
 	private Matrix<Boolean> bufferMatrix;
-	private GridAdapter gameAdapter;
+	private GridAdapter gameAdapter, nextAdapter;
 
-	public GameEngine(Context ctx, Handler handler) {
+	private TextView scoreTextView;
+	private int score = 0;
+	private TextView levelTextView;
+	private int level = 1;
+	private TextView linesTextView;
+	private int lines = 0;
+
+	public GameEngine(Context ctx, Handler handler,TextView scoreTextView, TextView levelTextView, TextView linesTextView) {
 		super(ctx);
 		this.handler = handler;
 		bufferMatrix = new Matrix<>(Boolean.class, numColumns, numRows, false);
 		gameMatrix = new Matrix<>(Integer.class, numColumns, numRows, R.drawable.block_empty);
+		nextMatrix = new Matrix<>(Integer.class, 4,4, R.drawable.block_empty);
 		gameAdapter = new GridAdapter(ctx, gameMatrix.data());
+		nextAdapter = new GridAdapter(ctx, nextMatrix.data());
 		current = TetrominoFactory.createTetromino();
 		next = TetrominoFactory.createTetromino();
-
+		fillNextGrid();
+		this.scoreTextView = scoreTextView;
+		this.levelTextView = levelTextView;
+		this.linesTextView = linesTextView;
+		updateTextViews();
 	}
 
 	@Override
@@ -34,10 +51,10 @@ public class GameEngine extends OnSwipeTouchListener implements Runnable {
 	}
 
 	private void clearGrid() {
-		for(int i = 0; i < gameMatrix.width(); i++) {
-			for(int j = 0; j < gameMatrix.height(); j++) {
-				if(!bufferMatrix.get(i, j)) {
-					gameMatrix.set(i, j, R.drawable.block_empty);
+		for(int i = 0; i < current.matrix().length; i++) {
+			for(int j = 0; j < current.matrix()[i].length; j++) {
+				if(!bufferMatrix.get(current.x() + j, current.y() + i)) {
+					gameMatrix.set(current.x() + j, current.y() + i, R.drawable.block_empty);
 				}
 			}
 		}
@@ -45,7 +62,7 @@ public class GameEngine extends OnSwipeTouchListener implements Runnable {
 	}
 
 	private void updateGrid() {
-		current.down();
+		current.down(gameMatrix);
 		for(int i = 0; i < current.matrix().length; i++) {
 			for(int j = 0; j < current.matrix()[i].length; j++) {
 				if(current.matrix()[i][j]) {
@@ -56,22 +73,45 @@ public class GameEngine extends OnSwipeTouchListener implements Runnable {
 		gameAdapter.notifyDataSetChanged();
 	}
 
-	public GridAdapter adapter() {
-		return gameAdapter;
+	private void updateTextViews() {
+		scoreTextView.setText("" + score);
+		levelTextView.setText("" + level);
+		linesTextView.setText("" + lines);
+	}
+
+	private void fillNextGrid() {
+		for(int i = 0; i < nextMatrix.width(); i++) {
+			for(int j = 0; j < nextMatrix.height(); j++) {
+				if(next.matrix()[i][j]) {
+					nextMatrix.set(i, j, next.sprite());
+				} else {
+					nextMatrix.set(i, j, R.drawable.block_empty);
+				}
+			}
+		}
+		nextAdapter.notifyDataSetChanged();
 	}
 
 	public void onSwipeRight() {
 		clearGrid();
-		current.right();
+		current.right(gameMatrix);
 		updateGrid();
 	}
+
 	public void onSwipeLeft() {
 		clearGrid();
-		current.left();
+		current.left(gameMatrix);
 		updateGrid();
 	}
 	public void onSwipeBottom() {
 		clearGrid();
 		updateGrid();
+	}
+	public GridAdapter getGameAdapter() {
+		return gameAdapter;
+	}
+
+	public GridAdapter getNextAdapter() {
+		return nextAdapter;
 	}
 }
