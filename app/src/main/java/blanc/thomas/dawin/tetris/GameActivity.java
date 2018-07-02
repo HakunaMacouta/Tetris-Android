@@ -12,11 +12,13 @@ import android.widget.Toast;
 import blanc.thomas.dawin.tetris.Model.GameEngine;
 
 public class GameActivity extends AppCompatActivity {
+
+	private GameEngine gameEngine;
+
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        initGame();
     }
 
 	@SuppressLint("ClickableViewAccessibility")
@@ -25,7 +27,7 @@ public class GameActivity extends AppCompatActivity {
 	    final Handler handler = new Handler();
 
 	    //Game logic
-		GameEngine gameEngine = new GameEngine(GameActivity.this, handler,
+		this.gameEngine = new GameEngine(GameActivity.this, handler,
 				(TextView)findViewById(R.id.ScoreTextView),
 				(TextView)findViewById(R.id.LevelTextView),
 				(TextView)findViewById(R.id.LinesTextView));
@@ -44,13 +46,14 @@ public class GameActivity extends AppCompatActivity {
 	}
 
 	void onRotate(View v) {
-//		gameEngine.rotateCurrent();
+		gameEngine.rotateCurrent();
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 		setImmersiveMode();
+		initGame();
 	}
 
 	private void setImmersiveMode() {

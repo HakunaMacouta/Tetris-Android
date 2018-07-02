@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 import blanc.thomas.dawin.tetris.GameActivity;
 import blanc.thomas.dawin.tetris.R;
@@ -13,6 +16,8 @@ public class GameEngine extends OnSwipeTouchListener implements Runnable {
 	private int gameSpeed = 500;
 	static public int numColumns = 10;
 	static public int numRows = 34;
+	static public int tetrominoPoint = 50;
+	static public int linePoint = 100;
 	private Tetromino current, next;
 
 	private Matrix<Integer> gameMatrix, nextMatrix;
@@ -26,8 +31,11 @@ public class GameEngine extends OnSwipeTouchListener implements Runnable {
 	private TextView linesTextView;
 	private int lines = 0;
 
+	Context ctx;
+
 	public GameEngine(Context ctx, Handler handler,TextView scoreTextView, TextView levelTextView, TextView linesTextView) {
 		super(ctx);
+		this.ctx = ctx;
 		this.handler = handler;
 		bufferMatrix = new Matrix<>(Boolean.class, numColumns, numRows, false);
 		gameMatrix = new Matrix<>(Integer.class, numColumns, numRows, R.drawable.block_empty);
@@ -46,13 +54,19 @@ public class GameEngine extends OnSwipeTouchListener implements Runnable {
 	@Override
 	public void run() {
 		clearGrid();
-		updateGrid();
+		updateGrid(Direction.Down);
+		System.out.println(current.x() + "  " + current.y());
 		this.handler.postDelayed(this, gameSpeed);
 	}
 
 	private void clearGrid() {
 		for(int i = 0; i < current.matrix().length; i++) {
 			for(int j = 0; j < current.matrix()[i].length; j++) {
+				if(current.y() + i >= GameEngine.numRows ||
+						current.x() + j < 0 ||
+						current.x() + j >= GameEngine.numColumns) {
+					continue;
+				}
 				if(!bufferMatrix.get(current.x() + j, current.y() + i)) {
 					gameMatrix.set(current.x() + j, current.y() + i, R.drawable.block_empty);
 				}
@@ -61,16 +75,65 @@ public class GameEngine extends OnSwipeTouchListener implements Runnable {
 		gameAdapter.notifyDataSetChanged();
 	}
 
-	private void updateGrid() {
-		current.down(gameMatrix);
+	private void updateGrid(Direction dir) {
+		boolean canMove = false;
+		switch (dir) {
+			case Left: canMove = current.left(bufferMatrix); break;
+			case Down: canMove = current.down(bufferMatrix); break;
+			case Right: canMove = current.right(bufferMatrix); break;
+		}
+
+		if(canMove) {
+			for(int i = 0; i < current.matrix().length; i++) {
+				for(int j = 0; j < current.matrix()[i].length; j++) {
+					if(current.matrix()[i][j]) {
+						this.gameMatrix.set(current.x() + j, current.y() + i, current.sprite());
+					}
+				}
+			}
+			gameAdapter.notifyDataSetChanged();
+		} else if(dir == Direction.Down) {
+			tetrominoPlaced();
+		}
+	}
+
+	private void tetrominoPlaced() {
 		for(int i = 0; i < current.matrix().length; i++) {
-			for(int j = 0; j < current.matrix()[i].length; j++) {
+			for (int j = 0; j < current.matrix()[i].length; j++) {
 				if(current.matrix()[i][j]) {
 					this.gameMatrix.set(current.x() + j, current.y() + i, current.sprite());
+					this.bufferMatrix.set(current.x() + j, current.y() + i, true);
 				}
 			}
 		}
-		gameAdapter.notifyDataSetChanged();
+		deleteLines();
+		score += tetrominoPoint;
+		this.current = this.next;
+		this.next = TetrominoFactory.createTetromino();
+		fillNextGrid();
+		updateTextViews();
+	}
+	private void deleteLines() {
+		ArrayList<Integer> lines = new ArrayList<>();
+		for(int i = bufferMatrix.height(); i >= 0; i--) {
+			boolean line = true;
+			for(int j = 0; j < bufferMatrix.width(); j++) {
+				if(!bufferMatrix.get(i, j)) {
+					line = false;
+				}
+			}
+			if(line) {
+				lines.add(i);
+			}
+		}
+		for(int l : lines) {
+			for(int i = l; i < bufferMatrix.height(); i++) {
+				for(int j = 0; j < bufferMatrix.width(); j++) {
+					bufferMatrix.set(i - 1, j, bufferMatrix.get(i, j));
+				}
+			}
+		}
+//		System.out.print(bufferMatrix.toString());
 	}
 
 	private void updateTextViews() {
@@ -92,21 +155,24 @@ public class GameEngine extends OnSwipeTouchListener implements Runnable {
 		nextAdapter.notifyDataSetChanged();
 	}
 
+	public void rotateCurrent() {
+		this.current.rotate(bufferMatrix);
+	}
+
 	public void onSwipeRight() {
 		clearGrid();
-		current.right(gameMatrix);
-		updateGrid();
+		updateGrid(Direction.Right);
 	}
 
 	public void onSwipeLeft() {
 		clearGrid();
-		current.left(gameMatrix);
-		updateGrid();
+		updateGrid(Direction.Left);
 	}
 	public void onSwipeBottom() {
 		clearGrid();
-		updateGrid();
+		updateGrid(Direction.Down);
 	}
+
 	public GridAdapter getGameAdapter() {
 		return gameAdapter;
 	}

@@ -12,9 +12,4 @@ public class TetrominoI extends Tetromino {
 				{ false, true, false, false }
 		};
 	}
-
-	@Override
-	public void rotate() {
-
-	}
 }

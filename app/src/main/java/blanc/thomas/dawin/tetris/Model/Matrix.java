@@ -36,4 +36,15 @@ public class Matrix<E> {
     public int width() { return this.cols; }
 
     public int height() { return this.rows; }
+
+    public String toString() {
+        String txt = "";
+    	for(int i = 0; i < this.rows; i++) {
+    		for(int j = 0; j < this.cols; j++) {
+    			txt += data[getIndex(i, j, this.cols)] + " ";
+		    }
+		    txt += "\n";
+	    }
+	    return txt;
+    }
 }

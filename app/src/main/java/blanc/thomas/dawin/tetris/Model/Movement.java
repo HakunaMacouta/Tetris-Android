@@ -1,8 +1,8 @@
 package blanc.thomas.dawin.tetris.Model;
 
 interface Movement {
-    void rotate();
-    void left(Matrix<Integer> grid);
-    void right(Matrix<Integer> grid);
-    void down(Matrix<Integer> grid);
+    void rotate(Matrix<Boolean> grid);
+    boolean left(Matrix<Boolean> grid);
+    boolean right(Matrix<Boolean> grid);
+    boolean down(Matrix<Boolean> grid);
 }

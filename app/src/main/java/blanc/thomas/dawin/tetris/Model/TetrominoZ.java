@@ -11,9 +11,4 @@ public class TetrominoZ extends Tetromino {
 
 		};
 	}
-
-	@Override
-	public void rotate() {
-
-	}
 }
